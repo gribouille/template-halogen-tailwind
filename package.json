@@ -1,0 +1,58 @@
+{
+  "name": "template-halogen-tailwind",
+  "version": "1.0.0",
+  "description": "Project's template for PureScript + Halogen + Tailwind",
+  "main": "index.js",
+  "scripts": {
+    "build:spago:watch": "spago build --watch --clear-screen",
+    "build:spago": "spago build --clear-screen",
+    "build:webpack:watch": "webpack serve --color --progress --mode=development --node-env=development",
+    "build:webpack": "webpack --progress --mode=production --node-env=production",
+    "install:spago": "spago install",
+    "repl": "spago repl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gribouille/template-halogen-tailwind.git"
+  },
+  "keywords": [
+    "template",
+    "purescript",
+    "tailwind",
+    "halogen"
+  ],
+  "author": "Hakim Taklanti <hakim.taklanti@ovhcloud.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gribouille/template-halogen-tailwind/issues"
+  },
+  "homepage": "https://github.com/gribouille/template-halogen-tailwind#readme",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.2",
+    "@tailwindcss/typography": "^0.5.2",
+    "autoprefixer": "^10.4.7",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
+    "cssnano": "^5.1.12",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "postcss": "^8.4.14",
+    "postcss-import": "^14.1.0",
+    "postcss-loader": "^7.0.0",
+    "postcss-preset-env": "^7.7.2",
+    "purescript": "^0.15.4",
+    "purs-tidy": "^0.9.0",
+    "source-map-loader": "^4.0.0",
+    "spago": "^0.20.9",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.1.4",
+    "tailwindcss-debug-screens": "^2.2.1",
+    "webpack": "^5.73.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3",
+    "webpack-merge": "^5.8.0"
+  }
+}
