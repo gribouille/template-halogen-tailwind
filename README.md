@@ -5,18 +5,15 @@ Project's template for PureScript + Halogen + Tailwind.
 
 ## Objectives
 
-- [x] rebuild on Purescript source changes
-- [x] rebuild on CSS source changes
-- [x] live reload
-- [x] generate HTML
-- [x] copy assets
-- [x] minify
-- [x] clean code
-- [x] clean css
-- [x] hash for build
-- [ ] config file in build
-- [ ] dynamique config file
+- [ ] move to JsonCodec
 - [ ] dockerfile
+- [ ] Logger
+  - [ ] Console
+  - [ ] Web
+  - [ ] Sentry
+- [ ] Login
+  - [ ] Page
+  - [ ] Logic
 
 
 ## Usage

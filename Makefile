@@ -57,5 +57,14 @@ env:
 ## dev: run the development server
 dev:
 	tmux \
-		new   			"npm run build:spago:watch; sleep 10" ';' \
-		split -p 30 "npm run build:webpack:watch; sleep 10"
+		new   			"npm run build:webpack:watch; sleep 10" ';' \
+		split -p 80 "npm run build:spago:watch; sleep 10"
+
+
+## dev-webpack: run the webpack development server
+dev-webpack:
+	npm run build:webpack:watch
+
+## dev-spago: run the spago development server
+dev-spago:
+	npm run build:spago:watch

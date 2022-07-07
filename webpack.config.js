@@ -1,4 +1,5 @@
 const path                     = require('path')
+const { execSync }             = require('child_process')
 const webpack                  = require('webpack')
 const { merge }                = require('webpack-merge')
 const HtmlWebpackPlugin        = require('html-webpack-plugin')
@@ -6,20 +7,29 @@ const CopyPlugin               = require('copy-webpack-plugin')
 const { CleanWebpackPlugin }   = require('clean-webpack-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin     = require("mini-css-extract-plugin")
+const CreateFileWebpack        = require('create-file-webpack')
 
+const TITLE         = 'Template Halogen Tailwind'
+const DESCRIPTION   = 'Project\'s template for PureScript + Halogen + Tailwind.'
+const AUTHOR        = 'Gribouille <gribouille.git@gmail.com>'
+const NAME          = 'template-halogen-tailwind'
+const CONTACT       = 'gribouille.git@gmail.com'
+const DOCUMENTATION = 'https://github.com/gribouille/template-halogen-tailwind/wiki'
 
-const TITLE       = 'Template Halogen Tailwind'
-const DESCRIPTION = 'Project\'s template for PureScript + Halogen + Tailwind.'
-const AUTHOR      = 'Gribouille <gribouille.git@gmail.com>'
-const MODE        = process.env.NODE_ENV || 'development'
-const DEV_PORT    = process.env.PORT || 3000
-const DEV_HOST    = process.env.HOST || '0.0.0.0'
-const SER_PORT    = process.env.SERVER_PORT || 4000
-const SER_HOST    = process.env.SERVER_HOST || '0.0.0.0'
-const DEBUG       = process.env.DEBUG || 'no'
-const TARGET      = path.resolve(__dirname, 'dist')
+const MODE          = process.env.NODE_ENV || 'development'
+const DEV_PORT      = process.env.PORT || 3000
+const DEV_HOST      = process.env.HOST || '0.0.0.0'
+const SER_PORT      = process.env.SERVER_PORT || 4000
+const SER_HOST      = process.env.SERVER_HOST || '0.0.0.0'
+const DEBUG         = process.env.DEBUG || 'no'
+const TARGET        = path.resolve(__dirname, 'dist')
+const CORS          = process.env.CORS || 'no'
 
 const pth = x => path.resolve(__dirname, x)
+const git_commit = () => execSync('git log -n 1 --pretty="format:%h"').toString().trim()
+const git_date = () => execSync('git log -n 1 --pretty="format:%cd"').toString().trim()
+const git_tag = () => execSync('git describe --abbrev=0 --tags').toString().trim()
+
 
 const common = {
   mode  : MODE,
@@ -82,9 +92,15 @@ const common = {
       ]
     }),
     new webpack.DefinePlugin({
-      MODE: MODE,
-      VERSION: 'TODO'
-    })
+      INFO_NAME         : JSON.stringify(NAME),
+      INFO_TITLE        : JSON.stringify(TITLE),
+      INFO_DESCRIPTION  : JSON.stringify(DESCRIPTION),
+      INFO_CONTACT      : JSON.stringify(CONTACT),
+      INFO_DOCUMENTATION: JSON.stringify(DOCUMENTATION),
+      VERSION_COMMIT    : JSON.stringify(git_commit()),
+      VERSION_TAG       : JSON.stringify(git_tag()),
+      VERSION_DATE      : JSON.stringify(git_date()),
+    }),
   ],
   optimization: {
     minimize   : true,
@@ -94,12 +110,24 @@ const common = {
   }
 }
 
+const envDev = `
+export default {
+  protocol  : 'http',
+  hostname  : '',
+  gateway   : '/api',
+  region    : 'local',
+  log_level : 'debug',
+}
+`
+
 const production = {
   devtool: 'source-map',
   module : {
     rules: [
     ]
-  }
+  },
+  plugins: [
+  ]
 }
 
 const development = {
@@ -118,20 +146,17 @@ const development = {
     port              : DEV_PORT,
     hot               : true,
     watchFiles        : ['src/**/*.purs', 'styles/**/*.css', 'test/**/*', 'assets/**/*'],
-    // headers: {
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-    //   "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    // },
+    headers: CORS !== 'yes'? {}: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
     proxy: {
       '/api': {
         target     : `${SER_HOST}:${SER_PORT}`,
         pathRewrite: {
           '^/api/': ''
         },
-        // headers: {
-        //   'X-Remote-User': 'Gribouille'
-        // },
         secure: false
       },
     }
@@ -143,7 +168,14 @@ const development = {
     splitChunks: {
       chunks: 'all'
     }
-  }
+  },
+  plugins: [
+    new CreateFileWebpack({
+      path: TARGET,
+      fileName: 'env.js',
+      content: envDev
+    })
+  ]
 }
 
 module.exports = merge(common, MODE === 'production' ? production : development)

@@ -1,4 +1,10 @@
-module Component.Button where
+module Component.Button
+  ( Action(..)
+  , State
+  , component
+  , handleAction
+  , render
+  ) where
 
 import Prelude
 
@@ -6,9 +12,7 @@ import Halogen (Component, ComponentHTML, mkComponent, HalogenM, modify_, mkEval
 import Halogen.HTML (ClassName(..), div_, p, text, button, img, IProp)
 import Halogen.HTML.Events (onClick)
 import Halogen.HTML.Properties (class_, src)
-
-cls :: forall i r. String -> IProp (class :: String | r) i
-cls = class_ <<< ClassName
+import Component.Utils (cls)
 
 type State = { count :: Int }
 
